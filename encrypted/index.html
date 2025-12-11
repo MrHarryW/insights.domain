@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Harry's Site</title>
+
+    <link rel="stylesheet" href="../home.css" />
+
+    <!-- <link rel="icon" type="image/png" href="./assets/images/favicon.png" sizes="32x32" /> -->
+
+    <!-- Open Graph Meta Tags (used by Discord) -->
+    <meta property="og:title" content="Harry's Site" />
+    <meta
+      property="og:description"
+      content="Tools and ideas built for, real impact"
+    />
+    <meta property="og:url" content="https://mrharryw.dev/" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <button id="toggleBtn" aria-label="Toggle sidebar">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <div id="sidebar" aria-hidden="true">
+      <h1>Harry's Site</h1>
+      <nav class="sidebar-nav">
+        <a href="https://mrharryw.dev/">Home</a>
+        <a href="./pages/grades.html">Grades</a>
+        <a href="./pages/workexperience.html">Work Experience</a>
+        <a href="./pages/politics.html">Politics</a>
+        <a href="./pages/cs.html">Computer Science</a>
+        <a href="./pages/cv.html">CV</a>
+        <a href="./pages/lor.html">Letters of Recommendation</a>
+      </nav>
+    </div>
+
+    <div id="hero"></div>
+    <div class="content">
+      <h1>
+        Welcome to the Insights Site,<br />if you are here you have been given
+        <em>restricted access</em>.
+      </h1>
+    </div>
+
+    <div id="scrollHint" aria-hidden="true">
+      <span class="arrow">▼</span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.waves.min.js"></script>
+    <script>
+      VANTA.WAVES({
+        el: "#hero",
+        mouseControls: true,
+        touchControls: true,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1,
+        scaleMobile: 1.0,
+        color: 0x19257B,
+        shininess: 50.0,
+        waveHeight: 30.0,
+        waveSpeed: 0.75,
+        zoom: 0.6,
+      });
+    </script>
+
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const toggleBtn = document.getElementById("toggleBtn");
+
+      let sidebarVisible = false;
+
+      function showSidebar() {
+        if (!sidebarVisible) {
+          sidebar.classList.add("open");
+          toggleBtn.classList.add("open");
+          sidebar.setAttribute("aria-hidden", "false");
+          sidebarVisible = true;
+        }
+      }
+
+      function hideSidebar() {
+        if (sidebarVisible) {
+          sidebar.classList.remove("open");
+          toggleBtn.classList.remove("open");
+          sidebar.setAttribute("aria-hidden", "true");
+          sidebarVisible = false;
+        }
+      }
+
+      window.addEventListener("wheel", (event) => {
+        if (event.deltaY > 0) {
+          showSidebar();
+        } else if (event.deltaY < 0) {
+          hideSidebar();
+        }
+      });
+
+      // Touch support
+      let touchStartY = null;
+
+      window.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+          touchStartY = e.touches[0].clientY;
+        }
+      });
+
+      window.addEventListener("touchmove", (e) => {
+        if (touchStartY === null) return;
+        const currentY = e.touches[0].clientY;
+        const diff = touchStartY - currentY;
+
+        if (diff > 10) {
+          showSidebar();
+        } else if (diff < -10) {
+          hideSidebar();
+        }
+      });
+
+      window.addEventListener("touchend", () => {
+        touchStartY = null;
+      });
+
+      window.addEventListener("touchend", () => {
+        touchStartY = null;
+      });
+    </script>
+
+    <style>
+      html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+  background-color: rgb(25, 37, 123);
+  color: white;
+}
+#hero {
+  width: 100%;
+  height: 100%;
+}
+.content {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+h1 {
+  font-size: 3rem;
+  max-width: 90%;
+  line-height: 1.2;
+}
+em {
+  font-style: italic;
+  color: #ccc;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px;
+  background: rgb(25, 37, 123);
+  color: #e5e7eb;
+  transform: translateX(-100%) scale(0.9);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  box-shadow: 4px 0 15px rgba(25, 37, 123, 0.5);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 25px 25px;
+  border-radius: 0 15px 15px 0;
+  will-change: transform, opacity;
+}
+
+#sidebar.open {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.sidebar-nav a {
+  color: #d1d5db;
+  font-weight: 600;
+  font-size: 1.15rem;
+  text-decoration: none;
+  padding: 8px 0;
+  border-left: 3px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  padding-left: 20px;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a:focus {
+  color: white;
+  border-left-color: white;
+  outline: none;
+}
+
+#toggleBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 36px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.bar {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background-color: white;
+  border-radius: 3px;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  transform-origin: center;
+}
+
+#toggleBtn.open .bar:nth-child(1) {
+  transform: translateY(13px) rotate(45deg);
+}
+
+#toggleBtn.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+#toggleBtn.open .bar:nth-child(3) {
+  transform: translateY(-13px) rotate(-45deg);
+}
+
+#scrollHint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1002;
+  font-size: 2rem;
+  color: white;
+  animation: bounce 1.5s infinite;
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+#scrollHint.hidden {
+  display: none;
+}
+
+.flag-icon:hover {
+  transform: scale(1.1);
+}
+    </style>
+  </body>
+
+</html>
